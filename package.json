@@ -1,0 +1,36 @@
+{
+  "name": "anon-members-only",
+  "version": "0.0.0",
+  "description": "An anonymous public space for posting comments.",
+  "main": "app.js",
+  "author": "Alfred O. Faith (Tony Fred)",
+  "license": "MIT",
+  "scripts": {
+    "server": "node --watch app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TonyFred-code/anon-members-only.git"
+  },
+  "keywords": [
+    "private posting",
+    "anonymous posting",
+    "express app"
+  ],
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/TonyFred-code/anon-members-only/issues"
+  },
+  "homepage": "https://github.com/TonyFred-code/anon-members-only#readme",
+  "dependencies": {
+    "dotenv": "^17.4.2",
+    "ejs": "^5.0.2",
+    "express": "^5.2.1",
+    "express-validator": "^7.3.2",
+    "pg": "^8.20.0"
+  },
+  "devDependencies": {
+    "prettier": "^3.8.4",
+    "prettier-plugin-ejs": "^1.0.3"
+  }
+}
