@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Log In</title>
+  </head>
+  <body>
+    <div id="root">
+      <%- include("partials/header.ejs", { title: "log in"}) %>
+      <main>
+        <header>
+          <div>
+            <img src="/images/app-logo.png" alt="" />
+          </div>
+          <h2>welcome back!</h2>
+        </header>
+        <form action="/login" method="post">
+          <div>
+            <label for="email">email address:</label>
+            <input
+              type="email"
+              name="email"
+              id="email"
+              placeholder="example@domain.com"
+            />
+          </div>
+          <div>
+            <label for="password">password:</label>
+            <input
+              type="password"
+              name="password"
+              id="password"
+              placeholder="****************"
+            />
+          </div>
+          <button type="submit">log in</button>
+        </form>
+        <div>
+          <span>new here?</span>
+          <a href="/register">register</a>
+        </div>
+      </main>
+    </div>
+  </body>
+</html>
