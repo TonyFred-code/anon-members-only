@@ -3,6 +3,7 @@ import { fileURLToPath } from "url";
 import { dirname, join } from "path";
 import { indexRouter } from "./routes/indexRouter.js";
 import { loginRouter } from "./routes/loginRouter.js";
+import { registerRouter } from "./routes/registerRouter.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -17,6 +18,7 @@ app.set("views", join(__dirname, "views"));
 app.set("view engine", "ejs");
 app.use(express.urlencoded({ extended: true }));
 
+app.use("/register", registerRouter); // Register Page
 app.use("/login", loginRouter); // Log In Page
 app.use("/", indexRouter); // Landing Page
 
