@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Registration</title>
+  </head>
+  <body>
+    <div id="root">
+      <%- include("partials/header.ejs", {title: "admin registration"}) %>
+      <main>
+        <p>
+          Become an anon clubhouse admin. Enter an anon admin secret passcode
+        </p>
+        <form action="/admin-registration" method="post">
+          <div>
+            <label for="admin_passcode"> admin passcode: </label>
+            <input
+              type="text"
+              name="admin_passcode"
+              id="admin_passcode"
+              placeholder="e.g. AD-908-BC"
+            />
+          </div>
+          <button type="submit">apply</button>
+        </form>
+      </main>
+    </div>
+  </body>
+</html>
