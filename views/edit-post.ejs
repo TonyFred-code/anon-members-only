@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Edit Post</title>
+  </head>
+  <body>
+    <div id="root">
+      <%- include("partials/header.ejs", {title: "edit post"}) %>
+      <main>
+        <form action="/edit-post" method="post">
+          <textarea name="post_content" id="post_content">
+It's a big world
+        </textarea
+          >
+          <button type="button">preview</button>
+        </form>
+      </main>
+    </div>
+  </body>
+</html>
