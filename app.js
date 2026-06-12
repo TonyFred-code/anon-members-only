@@ -9,6 +9,7 @@ import { adminRegistrationRouter } from "./routes/adminRegistrationRouter.js";
 import { editPostRouter } from "./routes/editPostRouter.js";
 import { homeRouter } from "./routes/homeRouter.js";
 import { createPostRouter } from "./routes/createPostRouter.js";
+import { membershipRouter } from "./routes/membershipRouter.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -23,6 +24,7 @@ app.set("views", join(__dirname, "views"));
 app.set("view engine", "ejs");
 app.use(express.urlencoded({ extended: true }));
 
+app.use("/membership", membershipRouter); // Membership Page
 app.use("/create-post", createPostRouter); // Create New Post Page
 app.use("/home", homeRouter); // Home Page (Posts Feed)
 app.use("/edit-post", editPostRouter); // Edit Post Page
