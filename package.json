@@ -6,7 +6,8 @@
   "author": "Alfred O. Faith (Tony Fred)",
   "license": "MIT",
   "scripts": {
-    "server": "node --watch app.js"
+    "server": "node --watch app.js",
+    "db:setup": "node --env-file=.env db/populatedb.js"
   },
   "repository": {
     "type": "git",
@@ -23,10 +24,16 @@
   },
   "homepage": "https://github.com/TonyFred-code/anon-members-only#readme",
   "dependencies": {
+    "bcrypt": "^6.0.0",
+    "connect-flash": "^0.1.1",
+    "connect-pg-simple": "^10.0.0",
     "dotenv": "^17.4.2",
     "ejs": "^5.0.2",
     "express": "^5.2.1",
+    "express-session": "^1.19.0",
     "express-validator": "^7.3.2",
+    "passport": "^0.7.0",
+    "passport-local": "^1.0.0",
     "pg": "^8.20.0"
   },
   "devDependencies": {
