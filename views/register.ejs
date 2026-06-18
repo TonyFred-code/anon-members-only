@@ -4,35 +4,150 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Register</title>
+    <link rel="stylesheet" href="/pages/reset.css" />
+    <link rel="stylesheet" href="/pages/shared.css" />
+    <link rel="stylesheet" href="/pages/register/style.css" />
+    <script src="/pages/register/main.js" defer></script>
   </head>
   <body>
     <div id="root">
       <%- include("partials/header.ejs", { title: "create account"}) %>
       <main>
+        <span data-error="network" class="hidden"></span>
         <form action="/register" method="post">
-          <div>
-            <label for="email">email address:</label>
-            <input type="email" name="email" id="email" />
+          <div data-step="step-1" class="wrapper">
+            <div class="field-wrapper email-field">
+              <span class="hidden" data-error="email" id="email-status"></span>
+              <div>
+                <label for="email">Email Address:</label>
+                <div class="email-wrapper">
+                  <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    value="<%= formData?.email ||'' %>"
+                  />
+                  <span class="spinner hidden" id="email-spinner"></span>
+                </div>
+              </div>
+            </div>
+            <div>
+              <span data-error="password" class="hidden"></span>
+              <label for="password">password:</label>
+              <input type="password" name="password" id="password" />
+              <div class="hidden" id="container__req-list">
+                <p>Password must contain at least:</p>
+                <!-- TODO: add checkmark or cross icon for each req state -->
+                <ul class="req-list">
+                  <li class="unmet" id="req__length">
+                    <div>
+                      <span class="met__icon-container">✅</span>
+                      <span class="unmet__icon-container">🟥</span>
+                    </div>
+                    8 or more characters
+                  </li>
+                  <li class="unmet" id="req__upper">
+                    <div>
+                      <span class="met__icon-container">✅</span>
+                      <span class="unmet__icon-container">🟥</span>
+                    </div>
+                    1 uppercase letter
+                  </li>
+                  <li class="unmet" id="req__lower">
+                    <div>
+                      <span class="met__icon-container">✅</span>
+                      <span class="unmet__icon-container">🟥</span>
+                    </div>
+                    1 lower case letter
+                  </li>
+                  <li class="unmet" id="req__number">
+                    <div>
+                      <span class="met__icon-container">✅</span>
+                      <span class="unmet__icon-container">🟥</span>
+                    </div>
+                    1 number (digit)
+                  </li>
+                  <li class="unmet" id="req__special">
+                    <div>
+                      <span class="met__icon-container">✅</span>
+                      <span class="unmet__icon-container">🟥</span>
+                    </div>
+                    1 special character
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <div>
+              <span
+                data-error="confirmPassword"
+                id="confirm-password-error"
+                class="hidden"
+              ></span>
+              <label for="confirm_password">confirm password:</label>
+              <input
+                type="password"
+                name="confirm_password"
+                id="confirm_password"
+              />
+            </div>
+            <div>
+              <button type="button" id="continue-btn">continue</button>
+            </div>
+            <div>
+              <span>Have an account?</span>
+              <a href="/login">Log in</a>
+            </div>
           </div>
-          <div>
-            <label for="password">password:</label>
-            <input type="password" name="password" id="password" />
-          </div>
+          <div class="wrapper hidden" data-step="step-2">
+            <section>
+              <header>
+                <div class="avatar">
+                  <span></span>
+                </div>
+                <h3>create username</h3>
+              </header>
+              <span data-error="username" class="hidden"></span>
+              <div>
+                <label for="adjectives">Adjectives: </label>
+                <select name="adjectives" id="adjectives">
+                  <% ADJECTIVES.forEach((adjective) => { %>
 
-          <div>
-            <label for="confirm_password">confirm password:</label>
-            <input
-              type="password"
-              name="confirm_password"
-              id="confirm_password"
-            />
+                  <% if (formData?.adjectives === adjective) {%>
+                  <option selected value="<%= adjective %>">
+                    <%= adjective %>
+                  </option>
+
+                  <% } else { %>
+                  <option value="<%= adjective %>"><%= adjective %></option>
+                  <% } %>
+                  <% }); %>
+                </select>
+              </div>
+
+              <div>
+                <label for="nouns">Nouns: </label>
+                <select name="nouns" id="nouns">
+                  <% NOUNS.forEach((noun) => { %>
+                  <option value="<%= noun %>"><%= noun %></option>
+                  <% }); %>
+                </select>
+              </div>
+              <div>
+                <span>preview:</span>
+                <span id="username-preview">swift-river-xxxx</span>
+                <button type="button" title="How it works?">?</button>
+              </div>
+            </section>
+            <div>
+              <button type="button" id="restart-reg">Go back</button>
+            </div>
+
+            <div>
+              <button type="button" id="random-username">random</button
+              ><button type="submit" id="submit-reg">continue</button>
+            </div>
           </div>
-          <button type="submit">continue</button>
         </form>
-        <div>
-          <span>Have an account?</span>
-          <a href="/login">Log in</a>
-        </div>
       </main>
     </div>
   </body>
