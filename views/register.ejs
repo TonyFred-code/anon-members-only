@@ -128,7 +128,13 @@
                 <label for="nouns">Nouns: </label>
                 <select name="nouns" id="nouns">
                   <% NOUNS.forEach((noun) => { %>
+                  <% if (formData?.nouns === noun) {%>
+                  <option selected value="<%= noun %>"><%= noun %></option>
+
+                  <% } else { %>
                   <option value="<%= noun %>"><%= noun %></option>
+                  <% } %>
+
                   <% }); %>
                 </select>
               </div>
