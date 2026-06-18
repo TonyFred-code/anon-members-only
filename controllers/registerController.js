@@ -25,7 +25,15 @@ function buildUsernameIfMissing(req, res, next) {
 }
 
 function registerGet(req, res) {
-  res.render("register", { ADJECTIVES, NOUNS });
+  res.render("register", {
+    ADJECTIVES,
+    NOUNS,
+    formData: {
+      adjectives: "",
+      nouns: "",
+      email: "",
+    },
+  });
 }
 
 async function checkEmailUnique(req, res, next) {
