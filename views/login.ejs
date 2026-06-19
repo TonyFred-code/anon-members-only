@@ -3,7 +3,9 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/pages/shared.css" />
     <title>Log In</title>
+    <script src="/pages/login/main.js" defer></script>
   </head>
   <body>
     <div id="root">
@@ -18,30 +20,31 @@
         <% if (errors && errors.length > 0) { %>
         <div class="flash-error"><%= errors[0] %></div>
         <% } %>
+        <span data-error="network" class="hidden"></span>
         <form action="/login" method="post">
           <div>
+            <span data-error="email" class="hidden"></span>
             <label for="email">email address:</label>
             <input
               type="email"
               name="email"
               id="email"
-              required
               autocomplete="email"
               placeholder="example@domain.com"
             />
           </div>
           <div>
+            <span data-error="password" class="hidden"></span>
             <label for="password">password:</label>
             <input
               type="password"
               name="password"
               id="password"
-              required
               autocomplete="current-password"
               placeholder="****************"
             />
           </div>
-          <button type="submit">log in</button>
+          <button type="submit" id="submit">log in</button>
         </form>
         <div>
           <span>new here?</span>
