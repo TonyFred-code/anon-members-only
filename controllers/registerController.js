@@ -65,15 +65,21 @@ async function checkUsernameUnique(req, res, next) {
 async function registerPost(req, res, next) {
   try {
     const hashedPassword = await hashPassword(req.body.password);
-    await pool.query(
+    const { rows } = await pool.query(
       `
       INSERT INTO users (email, password, username)
        VALUES ($1, $2, $3)
-       RETURNING id;
+       RETURNING id, email, username, is_member, is_admin, is_demo;
       `,
       [req.body.email, hashedPassword, req.body.username]
     );
-    res.redirect("/login");
+
+    const user = rows[0];
+
+    req.login(user, (err) => {
+      if (err) return next(err);
+      res.redirect("/home");
+    });
   } catch (error) {
     if (error.code === "23505") {
       if (error.constraint === "users_email_key") {
