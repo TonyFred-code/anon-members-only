@@ -15,13 +15,15 @@ passport.use(
 
         const user = rows[0];
 
-        if (!user) return done(null, false);
+        if (!user)
+          return done(null, false, { message: "Invalid email or password" });
 
         const isValid = await validPassword(password, user.password);
 
-        if (isValid) return done(null, user);
+        if (!isValid)
+          return done(null, false, { message: "Invalid email or password" });
 
-        return done(null, false);
+        return done(null, user);
       } catch (error) {
         return done(error);
       }
