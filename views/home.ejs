@@ -6,12 +6,24 @@
     <title>ANON MEMBERS</title>
   </head>
   <body>
-    anon clubhouse feed
+    <header>anon clubhouse feed</header>
     <% if (user) { %>
     <p>Welcome, <%= user.username %></p>
     <a href="/logout">Log Out</a>
     <% } else { %>
     <p>You are a guest</p>
+    <% } %>
+    <% if (posts && posts.length > 0) { %> <% posts.forEach(post => { %>
+    <div class="post">
+      <span><%= getDisplayName(post, user) %></span>
+
+      <p><%= post.content %></p>
+
+      <% if (user && (user.id === post.user_id || user.is_admin)) { %>
+      <!-- options menu: edit/delete -->
+      <% } %>
+    </div>
+    <% }) %>
     <% } %>
   </body>
 </html>
