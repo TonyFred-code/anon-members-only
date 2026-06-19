@@ -1,0 +1,14 @@
+{
+  "extends": [
+    "development"
+  ],
+  "connector": {
+    "name": "local",
+    "options": {
+      "ignoredUrls": [
+        "**/public/pages/login/styles.css",
+        "**/ignored-folder/**"
+      ]
+    }
+  }
+}
