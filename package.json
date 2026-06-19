@@ -8,7 +8,9 @@
   "scripts": {
     "server": "node --watch app.js",
     "db:setup": "node --env-file=.env db/populatedb.js",
-    "db:reset": "node --env-file=.env db/dropdb.js && npm run db:setup"
+    "db:reset": "node --env-file=.env db/dropdb.js && npm run db:setup",
+    "css:watch": "npx tailwindcss -i ./public/pages/main.css -o ./public/pages/shared.css --watch",
+    "css:build": "npx tailwindcss -i ./public/pages/main.css -o ./public/pages/shared.css --minify"
   },
   "repository": {
     "type": "git",
@@ -25,6 +27,7 @@
   },
   "homepage": "https://github.com/TonyFred-code/anon-members-only#readme",
   "dependencies": {
+    "@tailwindcss/cli": "^4.3.1",
     "bcrypt": "^6.0.0",
     "connect-flash": "^0.1.1",
     "connect-pg-simple": "^10.0.0",
@@ -35,7 +38,8 @@
     "express-validator": "^7.3.2",
     "passport": "^0.7.0",
     "passport-local": "^1.0.0",
-    "pg": "^8.20.0"
+    "pg": "^8.20.0",
+    "tailwindcss": "^4.3.1"
   },
   "devDependencies": {
     "prettier": "^3.8.4",
