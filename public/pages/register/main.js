@@ -24,14 +24,16 @@ function showFieldError(field, msg, type) {
 
   if (!element) return;
   element.textContent = msg;
-  element.classList = type;
+  element.classList.remove("hidden");
+
+  if (field === "email") emailErrorVisible = true;
 }
 
 function hideFieldError(field) {
   const element = document.querySelector(`[data-error='${field}']`);
 
   if (!element) return;
-  element.classList = "hidden";
+  element.classList.add("hidden");
 }
 
 function showSection(targetSection) {
