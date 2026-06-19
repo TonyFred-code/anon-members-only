@@ -20,6 +20,7 @@ import { membershipRouter } from "./routes/membershipRouter.js";
 import pool from "./db/pool.js";
 import { logoutRouter } from "./routes/logoutRouter.js";
 import { demoUserRouter } from "./routes/demoUserRouter.js";
+import { getDisplayName } from "./lib/postDisplayName.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -64,6 +65,7 @@ app.use((req, res, next) => {
 // Middleware to expose user to every view automatically
 app.use((req, res, next) => {
   res.locals.user = req.user;
+  res.locals.getDisplayName = getDisplayName;
   next();
 });
 
