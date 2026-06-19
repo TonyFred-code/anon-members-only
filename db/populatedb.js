@@ -131,11 +131,11 @@ async function main() {
     const demoMemberPassword = await bcrypt.hash("DemoMember1!", saltRounds);
     const regularPassword = await bcrypt.hash("Seeded1234!", saltRounds);
 
-    // Regular seeded user (non-demo, gives feed some life)
+    // Regular Demo seeded user
     const regularUser = await client.query(
       `
-      INSERT INTO users (email, username, password)
-      VALUES ('ghost@anonpost.com', 'Silent-Ghost-4921', $1)
+      INSERT INTO users (email, username, password, is_demo)
+      VALUES ('ghost@anonpost.com', 'Silent-Ghost-4921', $1, true)
       ON CONFLICT (email) DO NOTHING
       RETURNING id;
     `,
