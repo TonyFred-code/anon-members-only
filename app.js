@@ -19,6 +19,7 @@ import { createPostRouter } from "./routes/createPostRouter.js";
 import { membershipRouter } from "./routes/membershipRouter.js";
 import pool from "./db/pool.js";
 import { logoutRouter } from "./routes/logoutRouter.js";
+import { demoUserRouter } from "./routes/demoUserRouter.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -55,6 +56,10 @@ app.use(passport.session());
 
 // Flash Messages
 app.use(flash());
+app.use((req, res, next) => {
+  res.locals.errors = req.flash("error");
+  next();
+});
 
 // Middleware to expose user to every view automatically
 app.use((req, res, next) => {
@@ -62,6 +67,7 @@ app.use((req, res, next) => {
   next();
 });
 
+app.use("/demo", demoUserRouter); // Demo accounts
 app.use("/logout", logoutRouter); // Visiting this route logs out the user
 app.use("/membership", membershipRouter); // Membership Page
 app.use("/create-post", createPostRouter); // Create New Post Page
