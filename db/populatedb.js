@@ -218,22 +218,22 @@ async function main() {
       `,
         [content, regularId]
       );
-
-      await client.query(
-        `
-        INSERT INTO posts (content, user_id)
-        VALUES ($1, $2);
-      `,
-        [seedPosts[0], adminId]
-      );
-      await client.query(
-        `
-        INSERT INTO posts (content, user_id)
-        VALUES ($1, $2);
-      `,
-        [seedPosts[1], memberId]
-      );
     }
+
+    await client.query(
+      `
+      INSERT INTO posts (content, user_id)
+      VALUES ($1, $2);
+    `,
+      [seedPosts[0], adminId]
+    );
+    await client.query(
+      `
+      INSERT INTO posts (content, user_id)
+      VALUES ($1, $2);
+    `,
+      [seedPosts[1], memberId]
+    );
 
     console.log("✅ Database setup complete!");
     console.log("");
