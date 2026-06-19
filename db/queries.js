@@ -20,4 +20,23 @@ async function getDemoMember() {
   return rows[0];
 }
 
-export { getDemoAdmin, getDemoMember };
+async function getAllPosts() {
+  const { rows } = await pool.query(
+    `
+    SELECT 
+      posts.id AS post_id, 
+      posts.content, 
+      posts.created_at,
+      posts.last_updated,
+      users.id AS author_id, 
+      users.username AS author_username
+    FROM posts
+    LEFT JOIN users ON posts.user_id = users.id
+    ORDER BY posts.created_at DESC;
+    `
+  );
+
+  return rows;
+}
+
+export { getDemoAdmin, getDemoMember, getAllPosts };
