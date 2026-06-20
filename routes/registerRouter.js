@@ -1,6 +1,5 @@
 import { Router } from "express";
 import {
-  buildUsernameIfMissing,
   checkEmailUnique,
   checkUsernameUnique,
   registerGet,
@@ -8,6 +7,7 @@ import {
 } from "../controllers/registerController.js";
 import { registerValidationRules } from "../validators/registerValidation.js";
 import { handleValidationErrors } from "../middleware/validationHandlers.js";
+import { buildUsernameIfMissing } from "../middleware/registerMiddleware.js";
 
 const registerRouter = Router();
 

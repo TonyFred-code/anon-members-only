@@ -7,14 +7,6 @@ import {
   createNewUser,
 } from "../db/queries.js";
 
-function buildUsernameIfMissing(req, res, next) {
-  if (!req.body.username && req.body.adjectives && req.body.nouns) {
-    const suffix = Math.floor(1000 + Math.random() * 9000);
-    req.body.username = `${req.body.adjectives}-${req.body.nouns}-${suffix}`;
-  }
-  next();
-}
-
 function registerGet(req, res) {
   res.render("register", {
     ADJECTIVES,
@@ -86,10 +78,4 @@ async function registerPost(req, res, next) {
   }
 }
 
-export {
-  registerGet,
-  registerPost,
-  checkEmailUnique,
-  checkUsernameUnique,
-  buildUsernameIfMissing,
-};
+export { registerGet, registerPost, checkEmailUnique, checkUsernameUnique };
