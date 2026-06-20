@@ -87,7 +87,7 @@ app.use((err, req, res, next) => {
 
   const statusCode = err.statusCode || 500;
   const errMessage = err.message || "Internal server error";
-  res.status(statusCode).send(`<h1> Error: ${errMessage}`);
+  res.status(statusCode).type("text").send(`Error: ${errMessage}`);
 });
 
 const PORT = process.env.PORT || 3000;
