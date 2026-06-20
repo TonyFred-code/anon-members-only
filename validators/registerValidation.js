@@ -10,6 +10,7 @@ const registerValidationRules = [
     .notEmpty()
     .trim()
     .withMessage("Password is required")
+    .bail()
     .isStrongPassword({
       minLength: 8,
       minUppercase: 1,
