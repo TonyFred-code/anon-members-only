@@ -3,12 +3,12 @@ import {
   demoAdminHomeGet,
   demoMemberHomeGet,
 } from "../controllers/demoUserController.js";
-import { ensureUserLoggedOut } from "../controllers/logoutController.js";
+import { enforceUserLoggedOut } from "../middleware/authGuards.js";
 
 const demoUserRouter = new Router();
 
-demoUserRouter.get("/member", ensureUserLoggedOut, demoMemberHomeGet);
-demoUserRouter.get("/admin", ensureUserLoggedOut, demoAdminHomeGet);
+demoUserRouter.get("/member", enforceUserLoggedOut, demoMemberHomeGet);
+demoUserRouter.get("/admin", enforceUserLoggedOut, demoAdminHomeGet);
 demoUserRouter.get("/", (req, res) => {
   res.redirect("/");
 });
