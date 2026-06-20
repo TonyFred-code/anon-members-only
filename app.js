@@ -1,4 +1,11 @@
+import "./config/env.js";
+import "./config/passport.js"; // Expose Passport LocalStrategy
 import express from "express";
+import session from "express-session";
+import passport from "passport";
+import connectPgSimple from "connect-pg-simple";
+("connect-pg-simple");
+import flash from "connect-flash";
 import { fileURLToPath } from "url";
 import { dirname, join } from "path";
 import { indexRouter } from "./routes/indexRouter.js";
@@ -10,6 +17,10 @@ import { editPostRouter } from "./routes/editPostRouter.js";
 import { homeRouter } from "./routes/homeRouter.js";
 import { createPostRouter } from "./routes/createPostRouter.js";
 import { membershipRouter } from "./routes/membershipRouter.js";
+import pool from "./db/pool.js";
+import { logoutRouter } from "./routes/logoutRouter.js";
+import { demoUserRouter } from "./routes/demoUserRouter.js";
+import { getDisplayName } from "./lib/postDisplayName.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -24,6 +35,42 @@ app.set("views", join(__dirname, "views"));
 app.set("view engine", "ejs");
 app.use(express.urlencoded({ extended: true }));
 
+// SESSION SETUP
+const PGStore = connectPgSimple(session);
+
+app.use(
+  session({
+    store: new PGStore({ pool, createTableIfMissing: true }),
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    cookie: {
+      maxAge: 1000 * 60 * 60 * 24, // 1 DAY
+      httpOnly: true,
+    },
+    saveUninitialized: false,
+  })
+);
+
+// PASSPORT AUTHENTICATION
+app.use(passport.initialize());
+app.use(passport.session());
+
+// Flash Messages
+app.use(flash());
+app.use((req, res, next) => {
+  res.locals.errors = req.flash("error");
+  next();
+});
+
+// Middleware to expose user to every view automatically
+app.use((req, res, next) => {
+  res.locals.user = req.user;
+  res.locals.getDisplayName = getDisplayName;
+  next();
+});
+
+app.use("/demo", demoUserRouter); // Demo accounts
+app.use("/logout", logoutRouter); // Visiting this route logs out the user
 app.use("/membership", membershipRouter); // Membership Page
 app.use("/create-post", createPostRouter); // Create New Post Page
 app.use("/home", homeRouter); // Home Page (Posts Feed)
@@ -40,7 +87,7 @@ app.use((err, req, res, next) => {
 
   const statusCode = err.statusCode || 500;
   const errMessage = err.message || "Internal server error";
-  res.status(statusCode).send(`<h1> Error: ${errMessage}`);
+  res.status(statusCode).type("text").send(`Error: ${errMessage}`);
 });
 
 const PORT = process.env.PORT || 3000;

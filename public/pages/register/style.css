@@ -1,0 +1,15 @@
+.unmet__icon-container {
+  display: none;
+}
+
+.met__icon-container {
+  display: none;
+}
+
+.req-list li.met .met__icon-container {
+  display: inline-block;
+}
+
+.req-list li.unmet .unmet__icon-container {
+  display: inline-block;
+}

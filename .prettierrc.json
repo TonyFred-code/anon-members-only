@@ -3,5 +3,14 @@
   "singleQuote": false,
   "trailingComma": "es5",
   "printWidth": 80,
+  "overrides": [
+    {
+      "files": [".hintrc", "*.hintrc"],
+      "options": {
+        "parser": "json",
+        "trailingComma": "none"
+      }
+    }
+  ],
   "plugins": ["prettier-plugin-ejs"]
 }

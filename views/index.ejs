@@ -15,10 +15,13 @@
         <h1>Anon Club</h1>
       </header>
       <main>
+        <% if (errors && errors.length > 0) { %>
+        <span class="flash-error"><%= errors[0] %></span>
+        <% } %>
         <ul>
           <li><a href="/login">log in</a></li>
           <li><a href="/register">register</a></li>
-          <li><a href="/guest">guest</a></li>
+          <li><a href="/home">guest</a></li>
         </ul>
         <div>
           <hr />
