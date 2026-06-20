@@ -19,6 +19,14 @@ let emailErrorVisible = false;
 let emailCheckValid = false;
 let emailAbortController = null;
 
+const errorFieldVisible = {
+  email: false,
+  network: false,
+  password: false,
+  username: false,
+  confirmPassword: false,
+};
+
 function showFieldError(field, msg, type) {
   const element = document.querySelector(`[data-error='${field}']`);
 
@@ -26,7 +34,7 @@ function showFieldError(field, msg, type) {
   element.textContent = msg;
   element.classList.remove("hidden");
 
-  if (field === "email") emailErrorVisible = true;
+  errorFieldVisible[field] = true;
 }
 
 function hideFieldError(field) {
@@ -34,6 +42,7 @@ function hideFieldError(field) {
 
   if (!element) return;
   element.classList.add("hidden");
+  errorFieldVisible[field] = false;
 }
 
 function showSection(targetSection) {
@@ -116,15 +125,6 @@ function updatePasswordReqVisibility() {
   passwordReqListContainer.classList.toggle("hidden", met);
 }
 
-function updateContinueButton() {
-  const emailValid = emailInput.value && emailCheckValid;
-  const passwordValid =
-    passwordInput.value &&
-    meetsPasswordStrengthRequirements(passwordInput.value);
-
-  continueBtn.disabled = !(emailValid && passwordValid && passwordsMatch());
-}
-
 function updateRequirements(password) {
   toggleRequirement("req__length", password.length >= 8);
   toggleRequirement("req__upper", /[A-Z]/.test(password));
@@ -142,13 +142,11 @@ function toggleRequirement(id, met) {
 async function checkEmailUniqueAndValid() {
   if (!emailInput.value) return;
 
-  emailErrorVisible = false;
-  updateContinueButton();
+  hideFieldError("email");
   const emailValid = isEmailAddressValid(emailInput.value);
 
   if (!emailValid) {
     showFieldError("email", "Invalid email address", "error");
-    emailErrorVisible = true;
     return;
   }
 
@@ -169,18 +167,18 @@ async function checkEmailUniqueAndValid() {
     showFieldError("email", error.message || "Email check failed", "error");
     console.error(error);
   } finally {
-    updateContinueButton();
   }
 }
 
 emailInput.addEventListener("focus", () => {
   emailAbortController?.abort(); // cancel in-flight request
-  emailCheckValid = false;
-  updateContinueButton();
+  if (errorFieldVisible.email) {
+    hideFieldError("email");
+  }
 });
 
 emailInput.addEventListener("input", () => {
-  if (!emailErrorVisible) return;
+  if (!errorFieldVisible.email) return;
 
   hideFieldError("email");
 });
@@ -198,19 +196,20 @@ passwordInput.addEventListener("input", () => {
 
   updatePasswordReqVisibility();
   updateRequirements(passwordInput.value);
-  updateContinueButton();
 });
 
 passwordInput.addEventListener("blur", () => {
   updatePasswordReqVisibility();
   updateRequirements(passwordInput.value);
-  updateContinueButton();
 });
 
 passwordInput.addEventListener("focus", () => {
+  if (errorFieldVisible.password) {
+    hideFieldError("password");
+  }
+
   updatePasswordReqVisibility();
   updateRequirements(passwordInput.value);
-  updateContinueButton();
 });
 
 confirmPasswordInput.addEventListener("input", () => {
@@ -221,11 +220,45 @@ confirmPasswordInput.addEventListener("input", () => {
       hideFieldError("confirmPassword");
     }
   }
+});
 
-  updateContinueButton();
+confirmPasswordInput.addEventListener("focus", () => {
+  if (errorFieldVisible.confirmPassword) {
+    hideFieldError("confirmPassword");
+  }
 });
 
 continueBtn.addEventListener("click", () => {
+  // not checking if email is unique
+  // server will return right error if is is emailInput event listener is bypassed
+  const emailValid = isEmailAddressValid(emailInput.value);
+  const passwordValid = meetsPasswordStrengthRequirements(passwordInput.value);
+  const confirmPasswordMatch = passwordsMatch();
+
+  let hasError = false;
+  if (!emailValid) {
+    showFieldError("email", "Please enter a valid email address");
+    hasError = true;
+  }
+
+  if (!passwordInput.value) {
+    showFieldError("password", "This field is required");
+    hasError = true;
+  } else if (!passwordValid) {
+    showFieldError("password", "Please enter a strong password");
+    hasError = true;
+  }
+
+  if (!confirmPasswordInput.value) {
+    showFieldError("confirmPassword", "This field is required");
+    hasError = true;
+  } else if (!confirmPasswordMatch) {
+    showFieldError("confirmPassword", "Passwords do not match");
+    hasError = true;
+  }
+
+  if (hasError) return;
+
   pickRandomOption(selectAdjectivesElement);
   pickRandomOption(selectNounsElement);
   updateUsernamePreview();
@@ -261,16 +294,36 @@ submitRegistrationBtn.addEventListener("click", async (e) => {
   const randomSuffix = generateSuffix();
   const username = `${selectAdjectivesElement.value}-${selectNounsElement.value}-${randomSuffix}`;
 
-  const res = await fetch(`/register/check-username?username=${username}`);
-  const { taken } = await res.json();
-
-  if (taken) {
-    showFieldError("username", "Username already in use. Try again.", "info");
-    return;
-  }
-
   const emailAddress = emailInput.value;
   const password = passwordInput.value;
+
+  const emailValid = isEmailAddressValid(emailAddress);
+  const passwordValid = meetsPasswordStrengthRequirements(password);
+  const confirmPasswordMatch = passwordsMatch();
+
+  let hasError = false;
+  if (!emailValid) {
+    showFieldError("email", "Please enter a valid email address");
+    hasError = true;
+  }
+
+  if (!passwordInput.value) {
+    showFieldError("password", "This field is required");
+    hasError = true;
+  } else if (!passwordValid) {
+    showFieldError("password", "Please enter a strong password");
+    hasError = true;
+  }
+
+  if (!confirmPasswordInput.value) {
+    showFieldError("confirmPassword", "This field is required");
+    hasError = true;
+  } else if (!confirmPasswordMatch) {
+    showFieldError("confirmPassword", "Passwords do not match");
+    hasError = true;
+  }
+
+  if (hasError) return;
 
   try {
     const res = await fetch(`/register`, {
@@ -295,7 +348,7 @@ submitRegistrationBtn.addEventListener("click", async (e) => {
       "Something went wrong. Please try again.",
       "error"
     );
-    console.error(error, "local error");
+    console.error(error);
   }
 });
 
