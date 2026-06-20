@@ -5,8 +5,14 @@ function loginPage(req, res) {
 }
 
 function userLoginAuth(req, res, next) {
-  if (!req.body.email || !req.body.password) {
-    return res.status(400).json({ error: "Email and password are required" });
+  const missingFields = [];
+  if (!req.body.email)
+    missingFields.push({ path: "email", msg: "Email is required" });
+  if (!req.body.password)
+    missingFields.push({ path: "password", msg: "Password is required" });
+
+  if (missingFields.length > 0) {
+    return res.status(400).json({ errors: missingFields });
   }
 
   passport.authenticate("local", (err, user, info) => {
@@ -15,9 +21,14 @@ function userLoginAuth(req, res, next) {
     }
 
     if (!user) {
-      return res
-        .status(401)
-        .json({ error: info.message || "Email or password is incorrect" });
+      return res.status(401).json({
+        errors: [
+          {
+            path: "network",
+            msg: info.message || "Email or password is incorrect",
+          },
+        ],
+      });
     }
 
     req.logIn(user, (error) => {
