@@ -9,8 +9,11 @@
     "server": "node --watch app.js",
     "db:setup": "node --env-file=.env db/populatedb.js",
     "db:reset": "node --env-file=.env db/dropdb.js && npm run db:setup",
+    "db:setup:prod": "node --env-file=.env db/populatedb.js $PROD_DATABASE_URL",
     "css:watch": "npx tailwindcss -i ./public/pages/main.css -o ./public/pages/shared.css --watch",
-    "css:build": "npx tailwindcss -i ./public/pages/main.css -o ./public/pages/shared.css --minify"
+    "css:build": "npx tailwindcss -i ./public/pages/main.css -o ./public/pages/shared.css --minify",
+    "build": "npm run css:watch",
+    "start": "node app.js"
   },
   "repository": {
     "type": "git",
