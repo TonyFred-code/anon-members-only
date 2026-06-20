@@ -26,6 +26,12 @@ function hideFieldError(field) {
   fieldErrVisible[field] = false;
 }
 
+function handleServerErrors(errors) {
+  errors.forEach((error) => {
+    showFieldError(error.path, error.msg);
+  });
+}
+
 function isEmailAddressValid(emailAddress) {
   return /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/i.test(emailAddress.trim());
 }
@@ -82,7 +88,7 @@ submitBtn.addEventListener("click", async (e) => {
   }
 
   if (!passwordInput.value) {
-    showFieldError("password", "This field is required");
+    showFieldError("password", "Password is required");
     hasError = true;
   }
 
@@ -93,7 +99,7 @@ submitBtn.addEventListener("click", async (e) => {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Accepts: "application/json",
+        Accept: "application/json",
       },
       body: JSON.stringify({
         email: emailInput.value,
@@ -105,7 +111,7 @@ submitBtn.addEventListener("click", async (e) => {
     if (res.ok && data.success) {
       window.location.href = data.redirectUrl;
     } else if (!res.ok) {
-      showFieldError("network", data.error);
+      handleServerErrors(data.errors);
       return;
     }
   } catch (error) {
