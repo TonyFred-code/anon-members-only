@@ -9,5 +9,8 @@ const demoUserRouter = new Router();
 
 demoUserRouter.get("/member", ensureUserLoggedOut, demoMemberHomeGet);
 demoUserRouter.get("/admin", ensureUserLoggedOut, demoAdminHomeGet);
+demoUserRouter.get("/", (req, res) => {
+  res.redirect("/");
+});
 
 export { demoUserRouter };
