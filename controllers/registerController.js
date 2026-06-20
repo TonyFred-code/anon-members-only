@@ -1,22 +1,11 @@
 import { hashPassword } from "../lib/passwordUtils.js";
 import pool from "../db/pool.js";
 import { ADJECTIVES, NOUNS } from "../constants/userNameList.js";
-import { validationResult } from "express-validator";
 import {
   checkEmailExists,
   checkUsernameExists,
   createNewUser,
 } from "../db/queries.js";
-
-function handleValidationErrors(req, res, next) {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    return res.status(400).json({
-      errors: errors.array(),
-    });
-  }
-  next();
-}
 
 function buildUsernameIfMissing(req, res, next) {
   if (!req.body.username && req.body.adjectives && req.body.nouns) {
@@ -102,6 +91,5 @@ export {
   registerPost,
   checkEmailUnique,
   checkUsernameUnique,
-  handleValidationErrors,
   buildUsernameIfMissing,
 };

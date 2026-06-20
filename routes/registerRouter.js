@@ -3,11 +3,11 @@ import {
   buildUsernameIfMissing,
   checkEmailUnique,
   checkUsernameUnique,
-  handleValidationErrors,
   registerGet,
   registerPost,
 } from "../controllers/registerController.js";
 import { registerValidationRules } from "../validators/registerValidation.js";
+import { handleValidationErrors } from "../middleware/validationHandlers.js";
 
 const registerRouter = Router();
 
