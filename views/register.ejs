@@ -16,23 +16,24 @@
           <div data-step="step-1" class="wrapper">
             <div class="field-wrapper email-field">
               <span class="hidden" data-error="email" id="email-status"></span>
-              <div>
-                <label for="email">Email Address:</label>
-                <div class="email-wrapper">
-                  <input
-                    type="email"
-                    id="email"
-                    name="email"
-                    value="<%= formData?.email ||'' %>"
-                  />
-                  <span class="spinner hidden" id="email-spinner"></span>
-                </div>
-              </div>
+              <label for="email">Email Address:</label>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                autocomplete="email"
+                value="<%= formData?.email ||'' %>"
+              />
             </div>
             <div>
               <span data-error="password" class="hidden"></span>
               <label for="password">password:</label>
-              <input type="password" name="password" id="password" />
+              <input
+                type="password"
+                name="password"
+                autocomplete="new-password"
+                id="password"
+              />
               <div class="hidden" id="container__req-list">
                 <p>Password must contain at least:</p>
                 <!-- TODO: add checkmark or cross icon for each req state -->
@@ -84,6 +85,7 @@
               <label for="confirm_password">confirm password:</label>
               <input
                 type="password"
+                autocomplete="new-password"
                 name="confirm_password"
                 id="confirm_password"
               />
@@ -147,8 +149,8 @@
             </div>
 
             <div>
-              <button type="button" id="random-username">random</button
-              ><button type="submit" id="submit-reg">continue</button>
+              <button type="button" id="random-username">random username</button
+              ><button type="submit" id="submit-reg">Submit</button>
             </div>
           </div>
         </form>
