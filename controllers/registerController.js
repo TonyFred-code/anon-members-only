@@ -2,6 +2,11 @@ import { hashPassword } from "../lib/passwordUtils.js";
 import pool from "../db/pool.js";
 import { ADJECTIVES, NOUNS } from "../constants/userNameList.js";
 import { validationResult } from "express-validator";
+import {
+  checkEmailExists,
+  checkUsernameExists,
+  createNewUser,
+} from "../db/queries.js";
 
 function handleValidationErrors(req, res, next) {
   const errors = validationResult(req);
@@ -35,12 +40,8 @@ function registerGet(req, res) {
 
 async function checkEmailUnique(req, res, next) {
   try {
-    const { rows } = await pool.query(
-      "SELECT id FROM users WHERE email = $1;",
-      [req.query.email]
-    );
-
-    res.json({ taken: rows.length > 0 });
+    const taken = await checkEmailExists(req.query.email);
+    return res.json({ taken });
   } catch (error) {
     next(error);
   }
@@ -48,12 +49,8 @@ async function checkEmailUnique(req, res, next) {
 
 async function checkUsernameUnique(req, res, next) {
   try {
-    const { rows } = await pool.query(
-      "SELECT id FROM users WHERE username = $1;",
-      [req.query.username]
-    );
-
-    res.json({ taken: rows.length > 0 });
+    const taken = await checkUsernameExists(req.query.username);
+    return res.json({ taken });
   } catch (error) {
     next(error);
   }
@@ -62,16 +59,11 @@ async function checkUsernameUnique(req, res, next) {
 async function registerPost(req, res, next) {
   try {
     const hashedPassword = await hashPassword(req.body.password);
-    const { rows } = await pool.query(
-      `
-      INSERT INTO users (email, password, username)
-       VALUES ($1, $2, $3)
-       RETURNING id, email, username, is_member, is_admin, is_demo;
-      `,
-      [req.body.email, hashedPassword, req.body.username]
+    const user = await createNewUser(
+      req.body.email,
+      req.body.username,
+      hashedPassword
     );
-
-    const user = rows[0];
 
     req.login(user, (err) => {
       if (err) return next(err);

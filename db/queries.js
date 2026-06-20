@@ -39,4 +39,43 @@ async function getAllPosts() {
   return rows;
 }
 
-export { getDemoAdmin, getDemoMember, getAllPosts };
+async function checkEmailExists(email) {
+  const { rows } = await pool.query("SELECT id FROM users WHERE email = $1;", [
+    email,
+  ]);
+
+  return rows.length > 0;
+}
+
+async function checkUsernameExists(username) {
+  const { rows } = await pool.query(
+    "SELECT id FROM users WHERE username = $1;",
+    [username]
+  );
+
+  return rows.length > 0;
+}
+
+async function createNewUser(email, username, password) {
+  const { rows } = await pool.query(
+    `
+      INSERT INTO users (email, password, username)
+       VALUES ($1, $2, $3)
+       RETURNING id, email, username, is_member, is_admin, is_demo;
+      `,
+    [email, password, username]
+  );
+
+  const user = rows[0];
+
+  return user;
+}
+
+export {
+  getDemoAdmin,
+  getDemoMember,
+  getAllPosts,
+  checkEmailExists,
+  checkUsernameExists,
+  createNewUser,
+};
