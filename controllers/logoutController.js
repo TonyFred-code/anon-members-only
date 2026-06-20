@@ -1,11 +1,15 @@
-function ensureUserLoggedOut(req, res, next) {
-  if (req.isAuthenticated()) {
-    req.logout((err) => {
-      if (err) return next(err);
-    });
-  }
+function logOutUser(req, res, next) {
+  req.logout((error) => {
+    if (error) {
+      next(error);
+    }
 
-  next();
+    req.session.destroy((destroyErr) => {
+      if (destroyErr) return next(error);
+      res.clearCookie("connect.sid");
+      res.redirect("/");
+    });
+  });
 }
 
-export { ensureUserLoggedOut };
+export { logOutUser };

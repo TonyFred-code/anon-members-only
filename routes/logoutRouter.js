@@ -1,15 +1,8 @@
 import { Router } from "express";
+import { logOutUser } from "../controllers/logoutController.js";
 
 const logoutRouter = Router();
 
-logoutRouter.get("/", (req, res, next) => {
-  req.logout((error) => {
-    if (error) {
-      next(error);
-    }
-
-    res.redirect("/");
-  });
-});
+logoutRouter.get("/", logOutUser);
 
 export { logoutRouter };
