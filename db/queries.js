@@ -1,5 +1,18 @@
 import pool from "./pool.js";
 
+async function getDemoRegular() {
+  const { rows } = await pool.query(
+    `
+    SELECT id, email, is_demo, is_member, is_admin, username
+    FROM users
+    WHERE is_demo = true AND is_admin = false AND is_member = false
+    LIMIT 1;
+    `
+  );
+
+  return rows[0];
+}
+
 async function getDemoAdmin() {
   const { rows } = await pool.query(
     `
@@ -94,6 +107,7 @@ async function getUserById(id) {
 export {
   getDemoAdmin,
   getDemoMember,
+  getDemoRegular,
   getAllPosts,
   checkEmailExists,
   checkUsernameExists,
