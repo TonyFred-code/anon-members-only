@@ -2,18 +2,14 @@ import passport from "passport";
 import { Strategy as LocalStrategy } from "passport-local";
 import pool from "../db/pool.js";
 import { validPassword } from "../lib/passwordUtils.js";
+import { getUserByEmail, getUserById } from "../db/queries.js";
 
 passport.use(
   new LocalStrategy(
     { usernameField: "email" },
     async (email, password, done) => {
       try {
-        const { rows } = await pool.query(
-          "SELECT * FROM users WHERE email = $1",
-          [email]
-        );
-
-        const user = rows[0];
+        const user = await getUserByEmail(email);
 
         if (!user)
           return done(null, false, { message: "Invalid email or password" });
@@ -37,11 +33,7 @@ passport.serializeUser((user, done) => {
 
 passport.deserializeUser(async (id, done) => {
   try {
-    const { rows } = await pool.query(
-      "SELECT id, email, username, is_member, is_admin, is_demo FROM users WHERE id = $1;",
-      [id]
-    );
-    const user = rows[0];
+    const user = await getUserById(id);
 
     done(null, user);
   } catch (error) {

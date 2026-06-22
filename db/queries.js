@@ -71,6 +71,26 @@ async function createNewUser(email, username, password) {
   return user;
 }
 
+async function getUserByEmail(email) {
+  const { rows } = await pool.query("SELECT * FROM users WHERE email = $1", [
+    email,
+  ]);
+
+  const user = rows[0];
+
+  return user;
+}
+
+async function getUserById(id) {
+  const { rows } = await pool.query(
+    "SELECT id, email, username, is_member, is_admin, is_demo FROM users WHERE id = $1;",
+    [id]
+  );
+  const user = rows[0];
+
+  return user;
+}
+
 export {
   getDemoAdmin,
   getDemoMember,
@@ -78,4 +98,6 @@ export {
   checkEmailExists,
   checkUsernameExists,
   createNewUser,
+  getUserByEmail,
+  getUserById,
 };
