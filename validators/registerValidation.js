@@ -5,7 +5,8 @@ const registerValidationRules = [
     .isEmail()
     .normalizeEmail()
     .withMessage("Please enter a valid email address"),
-  body("username").notEmpty().trim().withMessage("Username is required"),
+  body("adjectives").notEmpty().withMessage("Please select an adjective."),
+  body("nouns").notEmpty().withMessage("Please select a noun."),
   body("password")
     .notEmpty()
     .trim()

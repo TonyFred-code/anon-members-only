@@ -27,6 +27,8 @@ const errorFieldVisible = {
   password: false,
   username: false,
   confirmPassword: false,
+  adjectives: false,
+  nouns: false,
 };
 
 function showFieldError(field, msg, type) {
@@ -66,6 +68,8 @@ const fieldToSection = {
   username: "step-2",
   password: "step-1",
   network: "step-1",
+  adjectives: "step-2",
+  nouns: "step-2",
 };
 
 function handleServerErrors(errors) {
@@ -288,12 +292,13 @@ submitRegistrationBtn.addEventListener("click", async (e) => {
 
   hideFieldError("username");
   hideFieldError("network");
-
-  const randomSuffix = generateSuffix();
-  const username = `${selectAdjectivesElement.value}-${selectNounsElement.value}-${randomSuffix}`;
+  hideFieldError("adjectives");
+  hideFieldError("nouns");
 
   const emailAddress = emailInput.value;
   const password = passwordInput.value;
+  const adjective = selectAdjectivesElement.value;
+  const noun = selectNounsElement.value;
 
   const emailValid = isEmailAddressValid(emailAddress);
   const passwordValid = meetsPasswordStrengthRequirements(password);
@@ -321,6 +326,22 @@ submitRegistrationBtn.addEventListener("click", async (e) => {
     hasError = true;
   }
 
+  if (hasError) {
+    hideSection("step-2");
+    showSection("step-1"); // Ensures email+password error is in view
+    return;
+  }
+
+  if (!adjective) {
+    showFieldError("adjectives", "Adjective selection is required");
+    hasError = true;
+  }
+
+  if (!noun) {
+    showFieldError("nouns", "Noun selection is required");
+    hasError = true;
+  }
+
   if (hasError) return;
 
   try {
@@ -330,7 +351,12 @@ submitRegistrationBtn.addEventListener("click", async (e) => {
         "Content-Type": "application/json",
         Accept: "application/json",
       },
-      body: JSON.stringify({ email: emailAddress, username, password }),
+      body: JSON.stringify({
+        email: emailAddress,
+        adjectives: adjective,
+        nouns: noun,
+        password,
+      }),
     });
 
     if (res.redirected) {
