@@ -101,7 +101,6 @@ export {
   getDemoRegular,
   getAllPosts,
   checkEmailExists,
-  checkUsernameExists,
   createNewUser,
   getUserByEmail,
   getUserById,
