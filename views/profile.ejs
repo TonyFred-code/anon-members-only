@@ -3,12 +3,20 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/pages/shared.css" />
     <title>Swift River | Profile</title>
   </head>
   <body>
     <div id="root">
       <%- include("partials/header.ejs", {title: "profile"}) %>
       <main>
+        <% if (errors && errors.length > 0) { %>
+        <span
+          class="flash-error block bg-red-50 text-red-600 border border-red-200 p-3 rounded-lg font-medium text-xs mb-4 w-max"
+        >
+          <%= errors[0] %>
+        </span>
+        <% } %>
         <header>
           <div>SR</div>
           <!-- // avatar icon -->
