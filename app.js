@@ -20,7 +20,6 @@ import { membershipRouter } from "./routes/membershipRouter.js";
 import pool from "./db/pool.js";
 import { logoutRouter } from "./routes/logoutRouter.js";
 import { demoUserRouter } from "./routes/demoUserRouter.js";
-import { getDisplayName } from "./lib/postDisplayName.js";
 import { serverErrorMiddleware } from "./middleware/errorMiddleware.js";
 import {
   attachFlashErrors,

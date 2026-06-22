@@ -1,3 +1,5 @@
+import { getDisplayName } from "../lib/postDisplayName.js";
+
 function attachFlashErrors(req, res, next) {
   res.locals.errors = req.flash("error");
   next();
