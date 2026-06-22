@@ -1,4 +1,4 @@
-function serverErrorMiddleware(err, res, req, next) {
+function serverErrorMiddleware(err, req, res, next) {
   console.error(err);
 
   const statusCode = err.statusCode || 500;
