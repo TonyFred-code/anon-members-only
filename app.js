@@ -21,6 +21,11 @@ import pool from "./db/pool.js";
 import { logoutRouter } from "./routes/logoutRouter.js";
 import { demoUserRouter } from "./routes/demoUserRouter.js";
 import { getDisplayName } from "./lib/postDisplayName.js";
+import { serverErrorMiddleware } from "./middleware/errorMiddleware.js";
+import {
+  attachFlashErrors,
+  attachUserLocals,
+} from "./middleware/responseModifiers.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -57,17 +62,10 @@ app.use(passport.session());
 
 // Flash Messages
 app.use(flash());
-app.use((req, res, next) => {
-  res.locals.errors = req.flash("error");
-  next();
-});
+app.use(attachFlashErrors);
 
-// Middleware to expose user to every view automatically
-app.use((req, res, next) => {
-  res.locals.user = req.user;
-  res.locals.getDisplayName = getDisplayName;
-  next();
-});
+// Middleware to expose user locals to every view automatically
+app.use(attachUserLocals);
 
 app.use("/demo", demoUserRouter); // Demo accounts
 app.use("/logout", logoutRouter); // Visiting this route logs out the user
@@ -82,13 +80,7 @@ app.use("/login", loginRouter); // Log In Page
 app.use("/", indexRouter); // Landing Page
 
 // ERROR HANDLING MIDDLEWARE
-app.use((err, req, res, next) => {
-  console.error(err);
-
-  const statusCode = err.statusCode || 500;
-  const errMessage = err.message || "Internal server error";
-  res.status(statusCode).type("text").send(`Error: ${errMessage}`);
-});
+app.use(serverErrorMiddleware);
 
 const PORT = process.env.PORT || 3000;
 
