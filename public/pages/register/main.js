@@ -31,13 +31,12 @@ const errorFieldVisible = {
   nouns: false,
 };
 
-function showFieldError(field, msg, type) {
+function showFieldError(field, msg) {
   const element = document.querySelector(`[data-error='${field}']`);
 
   if (!element) return;
   element.textContent = msg;
   element.classList.remove("hidden");
-
   errorFieldVisible[field] = true;
 }
 
@@ -82,7 +81,7 @@ function handleServerErrors(errors) {
   hideSection(targetSection === "step-1" ? "step-2" : "step-1");
 
   errors.forEach((err) => {
-    showFieldError(err.path, err.msg, "error");
+    showFieldError(err.path, err.msg);
   });
 }
 
@@ -148,7 +147,7 @@ async function checkEmailUniqueAndValid() {
   const emailValid = isEmailAddressValid(emailInput.value);
 
   if (!emailValid) {
-    showFieldError("email", "Invalid email address", "error");
+    showFieldError("email", "Invalid email address");
     return;
   }
 
@@ -162,13 +161,12 @@ async function checkEmailUniqueAndValid() {
     emailCheckValid = !taken;
 
     taken
-      ? showFieldError("email", "Email is already in use!", "warn")
+      ? showFieldError("email", "Email is already in use!")
       : hideFieldError("email");
   } catch (error) {
     if (error.name === "AbortError") return; // Cancelled in-flight;
-    showFieldError("email", error.message || "Email check failed", "error");
+    showFieldError("email", error.message || "Email check failed");
     console.error(error);
-  } finally {
   }
 }
 
@@ -190,7 +188,7 @@ emailInput.addEventListener("blur", checkEmailUniqueAndValid);
 passwordInput.addEventListener("input", () => {
   if (confirmPasswordInput.value.length > 0) {
     if (!passwordsMatch()) {
-      showFieldError("confirmPassword", "Passwords do not match", "error");
+      showFieldError("confirmPassword", "Passwords do not match");
     } else {
       hideFieldError("confirmPassword");
     }
@@ -217,7 +215,7 @@ passwordInput.addEventListener("focus", () => {
 confirmPasswordInput.addEventListener("input", () => {
   if (passwordInput.value.length > 0) {
     if (!passwordsMatch()) {
-      showFieldError("confirmPassword", "Passwords do not match", "error");
+      showFieldError("confirmPassword", "Passwords do not match");
     } else {
       hideFieldError("confirmPassword");
     }
@@ -367,11 +365,7 @@ submitRegistrationBtn.addEventListener("click", async (e) => {
       return;
     }
   } catch (error) {
-    showFieldError(
-      "network",
-      "Something went wrong. Please try again.",
-      "error"
-    );
+    showFieldError("network", "Something went wrong. Please try again.");
     console.error(error);
   }
 });
