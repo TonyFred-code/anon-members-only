@@ -1,11 +1,7 @@
 import { hashPassword } from "../lib/passwordUtils.js";
 import pool from "../db/pool.js";
 import { ADJECTIVES, NOUNS } from "../constants/userNameList.js";
-import {
-  checkEmailExists,
-  checkUsernameExists,
-  createNewUser,
-} from "../db/queries.js";
+import { checkEmailExists, createNewUser } from "../db/queries.js";
 
 function registerGet(req, res) {
   res.render("register", {
@@ -22,15 +18,6 @@ function registerGet(req, res) {
 async function checkEmailUnique(req, res, next) {
   try {
     const taken = await checkEmailExists(req.query.email);
-    return res.json({ taken });
-  } catch (error) {
-    next(error);
-  }
-}
-
-async function checkUsernameUnique(req, res, next) {
-  try {
-    const taken = await checkUsernameExists(req.query.username);
     return res.json({ taken });
   } catch (error) {
     next(error);
@@ -78,4 +65,4 @@ async function registerPost(req, res, next) {
   }
 }
 
-export { registerGet, registerPost, checkEmailUnique, checkUsernameUnique };
+export { registerGet, registerPost, checkEmailUnique };

@@ -60,15 +60,6 @@ async function checkEmailExists(email) {
   return rows.length > 0;
 }
 
-async function checkUsernameExists(username) {
-  const { rows } = await pool.query(
-    "SELECT id FROM users WHERE username = $1;",
-    [username]
-  );
-
-  return rows.length > 0;
-}
-
 async function createNewUser(email, username, password) {
   const { rows } = await pool.query(
     `

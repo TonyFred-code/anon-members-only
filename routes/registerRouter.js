@@ -12,7 +12,6 @@ import { buildUsernameIfMissing } from "../middleware/registerMiddleware.js";
 const registerRouter = Router();
 
 registerRouter.get("/check-email", checkEmailUnique);
-registerRouter.get("/check-username", checkUsernameUnique);
 registerRouter.post(
   "/",
   buildUsernameIfMissing,
