@@ -1,3 +1,5 @@
+import { isEmailAddressValid } from "../lib/validators.js";
+
 const emailInput = document.querySelector("input#email");
 const passwordInput = document.querySelector("input#password");
 const submitBtn = document.querySelector("button#submit");
@@ -30,10 +32,6 @@ function handleServerErrors(errors) {
   errors.forEach((error) => {
     showFieldError(error.path, error.msg);
   });
-}
-
-function isEmailAddressValid(emailAddress) {
-  return /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/i.test(emailAddress.trim());
 }
 
 emailInput.addEventListener("focus", () => {

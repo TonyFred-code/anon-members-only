@@ -1,3 +1,5 @@
+import { isEmailAddressValid } from "../lib/validators.js";
+
 const emailInput = document.querySelector("input#email");
 
 const passwordInput = document.querySelector("input#password");
@@ -78,10 +80,6 @@ function handleServerErrors(errors) {
   errors.forEach((err) => {
     showFieldError(err.path, err.msg, "error");
   });
-}
-
-function isEmailAddressValid(emailAddress) {
-  return /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/i.test(emailAddress.trim());
 }
 
 function passwordsMatch() {
