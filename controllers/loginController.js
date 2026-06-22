@@ -31,12 +31,17 @@ function userLoginAuth(req, res, next) {
       });
     }
 
-    req.logIn(user, (error) => {
+    // Keeping session info allows req.session.redirectTo to be defined
+    req.logIn(user, { keepSessionInfo: true }, (error) => {
       if (error) {
         return next(error);
       }
 
-      return res.status(200).json({ success: true, redirectUrl: "/home" });
+      const targetUrl = req.session.redirectTo || "/home";
+
+      delete req.session.redirectTo;
+
+      return res.status(200).json({ success: true, redirectUrl: targetUrl });
     });
   })(req, res, next);
 }
