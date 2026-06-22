@@ -129,17 +129,17 @@ async function main() {
     console.log("🌱 Seeding demo and default accounts...");
     const demoAdminPassword = await bcrypt.hash("DemoAdmin1!", saltRounds);
     const demoMemberPassword = await bcrypt.hash("DemoMember1!", saltRounds);
-    const regularPassword = await bcrypt.hash("Seeded1234!", saltRounds);
+    const demoRegularPassword = await bcrypt.hash("Seeded1234!", saltRounds);
 
     // Regular Demo seeded user
-    const regularUser = await client.query(
+    const demoRegularUser = await client.query(
       `
       INSERT INTO users (email, username, password, is_demo)
       VALUES ('ghost@anonpost.com', 'Silent-Ghost-4921', $1, true)
       ON CONFLICT (email) DO NOTHING
       RETURNING id;
     `,
-      [regularPassword]
+      [demoRegularPassword]
     );
 
     // Demo admin
@@ -165,7 +165,7 @@ async function main() {
     );
 
     const regularId =
-      regularUser.rows[0]?.id ||
+      demoRegularUser.rows[0]?.id ||
       (
         await client.query(
           `SELECT id FROM users WHERE email = 'ghost@anonpost.com'`

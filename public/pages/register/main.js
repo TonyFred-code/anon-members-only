@@ -1,3 +1,5 @@
+import { isEmailAddressValid } from "../lib/validators.js";
+
 const emailInput = document.querySelector("input#email");
 
 const passwordInput = document.querySelector("input#password");
@@ -25,15 +27,16 @@ const errorFieldVisible = {
   password: false,
   username: false,
   confirmPassword: false,
+  adjectives: false,
+  nouns: false,
 };
 
-function showFieldError(field, msg, type) {
+function showFieldError(field, msg) {
   const element = document.querySelector(`[data-error='${field}']`);
 
   if (!element) return;
   element.textContent = msg;
   element.classList.remove("hidden");
-
   errorFieldVisible[field] = true;
 }
 
@@ -64,6 +67,8 @@ const fieldToSection = {
   username: "step-2",
   password: "step-1",
   network: "step-1",
+  adjectives: "step-2",
+  nouns: "step-2",
 };
 
 function handleServerErrors(errors) {
@@ -76,12 +81,8 @@ function handleServerErrors(errors) {
   hideSection(targetSection === "step-1" ? "step-2" : "step-1");
 
   errors.forEach((err) => {
-    showFieldError(err.path, err.msg, "error");
+    showFieldError(err.path, err.msg);
   });
-}
-
-function isEmailAddressValid(emailAddress) {
-  return /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/i.test(emailAddress.trim());
 }
 
 function passwordsMatch() {
@@ -146,7 +147,7 @@ async function checkEmailUniqueAndValid() {
   const emailValid = isEmailAddressValid(emailInput.value);
 
   if (!emailValid) {
-    showFieldError("email", "Invalid email address", "error");
+    showFieldError("email", "Invalid email address");
     return;
   }
 
@@ -160,13 +161,12 @@ async function checkEmailUniqueAndValid() {
     emailCheckValid = !taken;
 
     taken
-      ? showFieldError("email", "Email is already in use!", "warn")
+      ? showFieldError("email", "Email is already in use!")
       : hideFieldError("email");
   } catch (error) {
     if (error.name === "AbortError") return; // Cancelled in-flight;
-    showFieldError("email", error.message || "Email check failed", "error");
+    showFieldError("email", error.message || "Email check failed");
     console.error(error);
-  } finally {
   }
 }
 
@@ -188,7 +188,7 @@ emailInput.addEventListener("blur", checkEmailUniqueAndValid);
 passwordInput.addEventListener("input", () => {
   if (confirmPasswordInput.value.length > 0) {
     if (!passwordsMatch()) {
-      showFieldError("confirmPassword", "Passwords do not match", "error");
+      showFieldError("confirmPassword", "Passwords do not match");
     } else {
       hideFieldError("confirmPassword");
     }
@@ -215,7 +215,7 @@ passwordInput.addEventListener("focus", () => {
 confirmPasswordInput.addEventListener("input", () => {
   if (passwordInput.value.length > 0) {
     if (!passwordsMatch()) {
-      showFieldError("confirmPassword", "Passwords do not match", "error");
+      showFieldError("confirmPassword", "Passwords do not match");
     } else {
       hideFieldError("confirmPassword");
     }
@@ -230,7 +230,7 @@ confirmPasswordInput.addEventListener("focus", () => {
 
 continueBtn.addEventListener("click", () => {
   // not checking if email is unique
-  // server will return right error if is is emailInput event listener is bypassed
+  // server will return the right error if the emailInput event listener is bypassed (e.g. curl type commands)
   const emailValid = isEmailAddressValid(emailInput.value);
   const passwordValid = meetsPasswordStrengthRequirements(passwordInput.value);
   const confirmPasswordMatch = passwordsMatch();
@@ -290,12 +290,13 @@ submitRegistrationBtn.addEventListener("click", async (e) => {
 
   hideFieldError("username");
   hideFieldError("network");
-
-  const randomSuffix = generateSuffix();
-  const username = `${selectAdjectivesElement.value}-${selectNounsElement.value}-${randomSuffix}`;
+  hideFieldError("adjectives");
+  hideFieldError("nouns");
 
   const emailAddress = emailInput.value;
   const password = passwordInput.value;
+  const adjective = selectAdjectivesElement.value;
+  const noun = selectNounsElement.value;
 
   const emailValid = isEmailAddressValid(emailAddress);
   const passwordValid = meetsPasswordStrengthRequirements(password);
@@ -323,6 +324,22 @@ submitRegistrationBtn.addEventListener("click", async (e) => {
     hasError = true;
   }
 
+  if (hasError) {
+    hideSection("step-2");
+    showSection("step-1"); // Ensures email+password error is in view
+    return;
+  }
+
+  if (!adjective) {
+    showFieldError("adjectives", "Adjective selection is required");
+    hasError = true;
+  }
+
+  if (!noun) {
+    showFieldError("nouns", "Noun selection is required");
+    hasError = true;
+  }
+
   if (hasError) return;
 
   try {
@@ -332,7 +349,12 @@ submitRegistrationBtn.addEventListener("click", async (e) => {
         "Content-Type": "application/json",
         Accept: "application/json",
       },
-      body: JSON.stringify({ email: emailAddress, username, password }),
+      body: JSON.stringify({
+        email: emailAddress,
+        adjectives: adjective,
+        nouns: noun,
+        password,
+      }),
     });
 
     if (res.redirected) {
@@ -343,11 +365,7 @@ submitRegistrationBtn.addEventListener("click", async (e) => {
       return;
     }
   } catch (error) {
-    showFieldError(
-      "network",
-      "Something went wrong. Please try again.",
-      "error"
-    );
+    showFieldError("network", "Something went wrong. Please try again.");
     console.error(error);
   }
 });

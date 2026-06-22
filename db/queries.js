@@ -1,5 +1,18 @@
 import pool from "./pool.js";
 
+async function getDemoRegular() {
+  const { rows } = await pool.query(
+    `
+    SELECT id, email, is_demo, is_member, is_admin, username
+    FROM users
+    WHERE is_demo = true AND is_admin = false AND is_member = false
+    LIMIT 1;
+    `
+  );
+
+  return rows[0];
+}
+
 async function getDemoAdmin() {
   const { rows } = await pool.query(
     `
@@ -47,15 +60,6 @@ async function checkEmailExists(email) {
   return rows.length > 0;
 }
 
-async function checkUsernameExists(username) {
-  const { rows } = await pool.query(
-    "SELECT id FROM users WHERE username = $1;",
-    [username]
-  );
-
-  return rows.length > 0;
-}
-
 async function createNewUser(email, username, password) {
   const { rows } = await pool.query(
     `
@@ -71,11 +75,33 @@ async function createNewUser(email, username, password) {
   return user;
 }
 
+async function getUserByEmail(email) {
+  const { rows } = await pool.query("SELECT * FROM users WHERE email = $1", [
+    email,
+  ]);
+
+  const user = rows[0];
+
+  return user;
+}
+
+async function getUserById(id) {
+  const { rows } = await pool.query(
+    "SELECT id, email, username, is_member, is_admin, is_demo FROM users WHERE id = $1;",
+    [id]
+  );
+  const user = rows[0];
+
+  return user;
+}
+
 export {
   getDemoAdmin,
   getDemoMember,
+  getDemoRegular,
   getAllPosts,
   checkEmailExists,
-  checkUsernameExists,
   createNewUser,
+  getUserByEmail,
+  getUserById,
 };

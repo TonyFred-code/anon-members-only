@@ -2,6 +2,8 @@ import { Router } from "express";
 import {
   demoAdminHomeGet,
   demoMemberHomeGet,
+  demoRegularHomeGet,
+  homeRedirect,
 } from "../controllers/demoUserController.js";
 import { enforceUserLoggedOut } from "../middleware/authGuards.js";
 
@@ -9,8 +11,7 @@ const demoUserRouter = new Router();
 
 demoUserRouter.get("/member", enforceUserLoggedOut, demoMemberHomeGet);
 demoUserRouter.get("/admin", enforceUserLoggedOut, demoAdminHomeGet);
-demoUserRouter.get("/", (req, res) => {
-  res.redirect("/");
-});
+demoUserRouter.get("/regular", enforceUserLoggedOut, demoRegularHomeGet);
+demoUserRouter.get("/", homeRedirect);
 
 export { demoUserRouter };

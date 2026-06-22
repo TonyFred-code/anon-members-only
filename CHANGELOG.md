@@ -8,6 +8,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.2.1] - 2026-06-22
+
+### Added
+
+- Added demo regular user path to allow user view what a regular user will see
+  without having to register
+
+---
+
 ## [0.2.0] - 2026-06-20
 
 ### Added
