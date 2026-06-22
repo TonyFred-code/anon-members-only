@@ -54,4 +54,13 @@ async function demoAdminHomeGet(req, res, next) {
   }
 }
 
-export { demoMemberHomeGet, demoAdminHomeGet, demoRegularHomeGet };
+function homeRedirect(req, res) {
+  res.redirect("/");
+}
+
+export {
+  demoMemberHomeGet,
+  demoAdminHomeGet,
+  demoRegularHomeGet,
+  homeRedirect,
+};
