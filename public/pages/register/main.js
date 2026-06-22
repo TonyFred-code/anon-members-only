@@ -232,7 +232,7 @@ confirmPasswordInput.addEventListener("focus", () => {
 
 continueBtn.addEventListener("click", () => {
   // not checking if email is unique
-  // server will return right error if is is emailInput event listener is bypassed
+  // server will return the right error if the emailInput event listener is bypassed (e.g. curl type commands)
   const emailValid = isEmailAddressValid(emailInput.value);
   const passwordValid = meetsPasswordStrengthRequirements(passwordInput.value);
   const confirmPasswordMatch = passwordsMatch();
