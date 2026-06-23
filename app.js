@@ -22,7 +22,7 @@ import { logoutRouter } from "./routes/logoutRouter.js";
 import { demoUserRouter } from "./routes/demoUserRouter.js";
 import { serverErrorMiddleware } from "./middleware/errorMiddleware.js";
 import {
-  attachFlashErrors,
+  attachFlashMessages,
   attachUserLocals,
 } from "./middleware/responseModifiers.js";
 
@@ -61,7 +61,7 @@ app.use(passport.session());
 
 // Flash Messages
 app.use(flash());
-app.use(attachFlashErrors);
+app.use(attachFlashMessages);
 
 // Middleware to expose user locals to every view automatically
 app.use(attachUserLocals);

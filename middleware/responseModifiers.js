@@ -1,7 +1,9 @@
 import { getDisplayName } from "../lib/postDisplayName.js";
 
-function attachFlashErrors(req, res, next) {
+function attachFlashMessages(req, res, next) {
+  res.locals.infos = req.flash("info");
   res.locals.errors = req.flash("error");
+  res.locals.successes = req.flash("success");
   next();
 }
 
@@ -11,4 +13,4 @@ function attachUserLocals(req, res, next) {
   next();
 }
 
-export { attachFlashErrors, attachUserLocals };
+export { attachFlashMessages, attachUserLocals };
