@@ -1,4 +1,4 @@
-import { getDisplayName } from "../lib/postUtils.js";
+import { getPostAuthorDisplayName } from "../lib/postUtils.js";
 import { getDisplayNameFromUsername } from "../lib/usernameUtils.js";
 
 function attachFlashMessages(req, res, next) {
@@ -10,7 +10,7 @@ function attachFlashMessages(req, res, next) {
 
 function attachUserLocals(req, res, next) {
   res.locals.user = req.user;
-  res.locals.getDisplayName = getDisplayName;
+  res.locals.getPostAuthorDisplayName = getPostAuthorDisplayName;
   res.locals.getDisplayNameFromUsername = getDisplayNameFromUsername;
   next();
 }
