@@ -7,7 +7,7 @@ function enforceUserLoggedOut(req, res, next) {
     if (err) return next(err);
 
     req.session.destroy((destroyErr) => {
-      if (destroyErr) return next(error);
+      if (destroyErr) return next(destroyErr);
       res.clearCookie("connect.sid");
       next();
     });
