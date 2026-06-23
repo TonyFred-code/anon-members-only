@@ -135,7 +135,7 @@ async function main() {
     const demoRegularUser = await client.query(
       `
       INSERT INTO users (email, username, password, is_demo)
-      VALUES ('ghost@anonpost.com', 'Silent-Ghost-4921', $1, true)
+      VALUES ('ghost@anonpost.com', 'silent-ghost-4921', $1, true)
       ON CONFLICT (email) DO NOTHING
       RETURNING id;
     `,
@@ -146,7 +146,7 @@ async function main() {
     const demoAdmin = await client.query(
       `
       INSERT INTO users (email, username, password, is_member, is_admin, is_demo)
-      VALUES ('demo.admin@anonpost.com', 'Clever-Fox-0001', $1, true, true, true)
+      VALUES ('demo.admin@anonpost.com', 'clever-fox-0001', $1, true, true, true)
       ON CONFLICT (email) DO NOTHING
       RETURNING id;
     `,
@@ -157,7 +157,7 @@ async function main() {
     const demoMember = await client.query(
       `
       INSERT INTO users (email, username, password, is_member, is_demo)
-      VALUES ('demo.member@anonpost.com', 'Swift-River-0002', $1, true, true)
+      VALUES ('demo.member@anonpost.com', 'swift-river-0002', $1, true, true)
       ON CONFLICT (email) DO NOTHING
       RETURNING id;
     `,
