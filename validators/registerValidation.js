@@ -2,14 +2,17 @@ import { body } from "express-validator";
 
 const registerValidationRules = [
   body("email")
-    .isEmail()
     .normalizeEmail()
+    .isEmail()
     .withMessage("Please enter a valid email address"),
-  body("adjectives").notEmpty().withMessage("Please select an adjective."),
-  body("nouns").notEmpty().withMessage("Please select a noun."),
-  body("password")
-    .notEmpty()
+  body("adjectives")
     .trim()
+    .notEmpty()
+    .withMessage("Please select an adjective."),
+  body("nouns").trim().notEmpty().withMessage("Please select a noun."),
+  body("password")
+    .trim()
+    .notEmpty()
     .withMessage("Password is required")
     .bail()
     .isStrongPassword({

@@ -11,6 +11,13 @@
     <div id="root">
       <%- include("partials/header.ejs", { title: "log in"}) %>
       <main>
+        <% if (errors && errors.length > 0) { %>
+        <span
+          class="flash-error block bg-red-50 text-red-600 border border-red-200 p-3 rounded-lg font-medium text-xs mb-4 w-max"
+        >
+          <%= errors[0] %>
+        </span>
+        <% } %>
         <header>
           <div>
             <img src="/images/anon-logo.png" alt="" />

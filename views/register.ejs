@@ -115,12 +115,14 @@
                   <% ADJECTIVES.forEach((adjective) => { %>
 
                   <% if (formData?.adjectives === adjective) {%>
-                  <option selected value="<%= adjective %>">
+                  <option selected value="<%= adjective.toLowerCase() %>">
                     <%= adjective %>
                   </option>
 
                   <% } else { %>
-                  <option value="<%= adjective %>"><%= adjective %></option>
+                  <option value="<%= adjective.toLowerCase() %>">
+                    <%= adjective %>
+                  </option>
                   <% } %>
                   <% }); %>
                 </select>
@@ -133,10 +135,12 @@
                 <select name="nouns" id="nouns">
                   <% NOUNS.forEach((noun) => { %>
                   <% if (formData?.nouns === noun) {%>
-                  <option selected value="<%= noun %>"><%= noun %></option>
+                  <option selected value="<%= noun.toLowerCase() %>">
+                    <%= noun %>
+                  </option>
 
                   <% } else { %>
-                  <option value="<%= noun %>"><%= noun %></option>
+                  <option value="<%= noun.toLowerCase() %>"><%= noun %></option>
                   <% } %>
 
                   <% }); %>

@@ -4,7 +4,6 @@ import express from "express";
 import session from "express-session";
 import passport from "passport";
 import connectPgSimple from "connect-pg-simple";
-("connect-pg-simple");
 import flash from "connect-flash";
 import { fileURLToPath } from "url";
 import { dirname, join } from "path";
@@ -20,10 +19,12 @@ import { membershipRouter } from "./routes/membershipRouter.js";
 import pool from "./db/pool.js";
 import { logoutRouter } from "./routes/logoutRouter.js";
 import { demoUserRouter } from "./routes/demoUserRouter.js";
-import { getDisplayName } from "./lib/postDisplayName.js";
-import { serverErrorMiddleware } from "./middleware/errorMiddleware.js";
 import {
-  attachFlashErrors,
+  notFoundMiddleware,
+  serverErrorMiddleware,
+} from "./middleware/errorMiddleware.js";
+import {
+  attachFlashMessages,
   attachUserLocals,
 } from "./middleware/responseModifiers.js";
 
@@ -62,7 +63,7 @@ app.use(passport.session());
 
 // Flash Messages
 app.use(flash());
-app.use(attachFlashErrors);
+app.use(attachFlashMessages);
 
 // Middleware to expose user locals to every view automatically
 app.use(attachUserLocals);
@@ -79,6 +80,8 @@ app.use("/register", registerRouter); // Register Page
 app.use("/login", loginRouter); // Log In Page
 app.use("/", indexRouter); // Landing Page
 
+// PAGE NOT FOUND MIDDLEWARE
+app.use(notFoundMiddleware);
 // ERROR HANDLING MIDDLEWARE
 app.use(serverErrorMiddleware);
 

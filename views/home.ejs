@@ -7,10 +7,16 @@
   </head>
   <body>
     <header>anon clubhouse feed</header>
+    <% if (infos && infos.length > 0) { %>
+    <div class="flash-info"><%= infos[0] %></div>
+    <% } %>
+
     <% if (user) { %>
     <p>Welcome, <%= user.username %></p>
     <a href="/create-post" class="...">+ New Post</a>
-    <a href="/logout">Log Out</a>
+    <form action="/logout" method="POST" class="inline">
+      <button type="submit">Log Out</button>
+    </form>
     <% } else { %>
     <div class="guest-banner ...">
       Browsing as a guest. <a href="/register">Register</a> or
@@ -19,7 +25,7 @@
     <% } %>
     <% if (posts && posts.length > 0) { %> <% posts.forEach(post => { %>
     <div class="post">
-      <span><%= getDisplayName(post, user) %></span>
+      <span><%= getPostAuthorDisplayName(post, user) %></span>
 
       <p><%= post.content %></p>
 
