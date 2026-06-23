@@ -112,5 +112,4 @@ export {
   createNewUser,
   getUserByEmail,
   getUserById,
-  getUserByEmailWithPassword,
 };
