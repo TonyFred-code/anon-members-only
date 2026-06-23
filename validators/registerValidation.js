@@ -2,8 +2,8 @@ import { body } from "express-validator";
 
 const registerValidationRules = [
   body("email")
-    .isEmail()
     .normalizeEmail()
+    .isEmail()
     .withMessage("Please enter a valid email address"),
   body("adjectives")
     .trim()
