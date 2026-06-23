@@ -3,6 +3,6 @@ import { logOutUser } from "../controllers/logoutController.js";
 
 const logoutRouter = Router();
 
-logoutRouter.get("/", logOutUser);
+logoutRouter.post("/", logOutUser);
 
 export { logoutRouter };
