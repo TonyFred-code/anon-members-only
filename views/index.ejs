@@ -18,6 +18,17 @@
         <% if (errors && errors.length > 0) { %>
         <span class="flash-error"><%= errors[0] %></span>
         <% } %>
+        <% if (user) { %>
+        <section>
+          <h2>
+            Welcome back,
+            <%= user.username %>
+          </h2>
+          <ul>
+            <li><a href="/home">Continue as <%= user.username %></a></li>
+          </ul>
+        </section>
+        <% } else { %>
         <ul>
           <li><a href="/login">log in</a></li>
           <li><a href="/register">register</a></li>
@@ -36,6 +47,7 @@
             <li><a href="/demo/regular">regular</a></li>
           </ul>
         </section>
+        <% } %>
       </main>
     </div>
   </body>
