@@ -75,10 +75,13 @@ async function createNewUser(email, username, password) {
   return user;
 }
 
+// Deliberately includes the password field as it is
+// only used by passportJS to compare when logging a user in
+// Data never gets saved into session.
 async function getUserByEmail(email) {
   const { rows } = await pool.query(
     `
-    SELECT id, email, username, is_member, is_admin, is_demo
+    SELECT id, email, username, password, is_member, is_admin, is_demo
     FROM users
     WHERE email = $1
     `,
@@ -109,4 +112,5 @@ export {
   createNewUser,
   getUserByEmail,
   getUserById,
+  getUserByEmailWithPassword,
 };
