@@ -4,7 +4,6 @@ import express from "express";
 import session from "express-session";
 import passport from "passport";
 import connectPgSimple from "connect-pg-simple";
-("connect-pg-simple");
 import flash from "connect-flash";
 import { fileURLToPath } from "url";
 import { dirname, join } from "path";
