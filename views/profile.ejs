@@ -4,27 +4,59 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="/pages/shared.css" />
-    <title>Swift River | Profile</title>
+    <% if (user) {%>
+    <title><%= getDisplayNameFromUsername(user.username) %> | Profile</title>
+
+    <% } else { %>
+    <title>Visitor | Profile</title>
+    <% } %>
   </head>
   <body>
     <div id="root">
-      <%- include("partials/header.ejs", {title: "profile"}) %>
+      <%- include("partials/header.ejs", {title: "profile"}) %> <% if (errors &&
+      errors.length > 0) { %>
+      <span
+        class="flash-error block bg-red-50 text-red-600 border border-red-200 p-3 rounded-lg font-medium text-xs mb-4 w-max"
+      >
+        <%= errors[0] %>
+      </span>
+      <% } %>
       <main>
-        <% if (errors && errors.length > 0) { %>
-        <span
-          class="flash-error block bg-red-50 text-red-600 border border-red-200 p-3 rounded-lg font-medium text-xs mb-4 w-max"
-        >
-          <%= errors[0] %>
-        </span>
-        <% } %>
-        <header>
-          <div>SR</div>
-          <!-- // avatar icon -->
-          <h1>Swift-River-5689</h1>
-        </header>
+        <% if (!user) { %>
         <section>
-          <div></div>
+          <h1>You're not logged in</h1>
+          <p>Log in or register to view your profile.</p>
+          <ul>
+            <li><a href="/login">Log in</a></li>
+            <li><a href="/register">Register</a></li>
+          </ul>
         </section>
+        <% } else { %>
+        <section>
+          <h1><%= user.username %></h1>
+
+          <ul>
+            <li>
+              Email:
+              <%= user.email %>
+            </li>
+            <li>
+              Role:
+              <% if (user.is_admin) { %>Admin
+              <% } else if (user.is_member) { %>Member
+              <% } else { %>Registered
+              <% } %>
+            </li>
+            <% if (user.is_demo) { %>
+            <li><strong>Demo account</strong></li>
+            <% } %>
+          </ul>
+
+          <form action="/logout" method="POST">
+            <button type="submit">Log out</button>
+          </form>
+        </section>
+        <% } %>
       </main>
     </div>
   </body>
