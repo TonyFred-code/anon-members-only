@@ -8,6 +8,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.3.0] - 2026-06-23
+
+### Added
+
+- Included route protection on routes (member or registered user protection) which
+  prevents user without necessary access rights from viewing the page
+- Enhanced profile and index page views to showcase user that is logged in or not
+
+### Changed
+
+- Improved post feeds post author display name depending on user right and post
+  author
+
+---
+
 ## [0.2.1] - 2026-06-22
 
 ### Added
