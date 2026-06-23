@@ -6,4 +6,11 @@ function serverErrorMiddleware(err, req, res, next) {
   res.status(statusCode).type("text").send(`Error: ${errMessage}`);
 }
 
-export { serverErrorMiddleware };
+function notFoundMiddleware(req, res, next) {
+  res.status(404);
+
+  // Minimal version for now.
+  res.type("text").send("404 not found");
+}
+
+export { serverErrorMiddleware, notFoundMiddleware };

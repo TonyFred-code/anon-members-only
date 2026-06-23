@@ -20,7 +20,10 @@ import { membershipRouter } from "./routes/membershipRouter.js";
 import pool from "./db/pool.js";
 import { logoutRouter } from "./routes/logoutRouter.js";
 import { demoUserRouter } from "./routes/demoUserRouter.js";
-import { serverErrorMiddleware } from "./middleware/errorMiddleware.js";
+import {
+  notFoundMiddleware,
+  serverErrorMiddleware,
+} from "./middleware/errorMiddleware.js";
 import {
   attachFlashMessages,
   attachUserLocals,
@@ -78,6 +81,8 @@ app.use("/register", registerRouter); // Register Page
 app.use("/login", loginRouter); // Log In Page
 app.use("/", indexRouter); // Landing Page
 
+// PAGE NOT FOUND MIDDLEWARE
+app.use(notFoundMiddleware);
 // ERROR HANDLING MIDDLEWARE
 app.use(serverErrorMiddleware);
 
