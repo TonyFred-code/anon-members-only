@@ -1,4 +1,4 @@
-import { getDisplayName } from "../lib/postDisplayName.js";
+import { getDisplayName } from "../lib/postUtils.js";
 import { getDisplayNameFromUsername } from "../lib/usernameUtils.js";
 
 function attachFlashMessages(req, res, next) {
