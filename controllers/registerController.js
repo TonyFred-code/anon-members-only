@@ -2,7 +2,7 @@ import { hashPassword } from "../lib/passwordUtils.js";
 import pool from "../db/pool.js";
 import { ADJECTIVES, NOUNS } from "../constants/userNameList.js";
 import { checkEmailExists, createNewUser } from "../db/queries.js";
-import { buildUsername } from "../lib/buildUsername.js";
+import { buildUsername } from "../lib/usernameUtils.js";
 
 function registerGet(req, res) {
   res.render("register", {
