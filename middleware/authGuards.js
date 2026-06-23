@@ -14,6 +14,13 @@ function enforceUserLoggedOut(req, res, next) {
   });
 }
 
+function redirectIfAuthenticated(req, res, next) {
+  if (!req.isAuthenticated()) return next();
+
+  req.flash("info", "You're already logged in.");
+  return res.redirect("/home");
+}
+
 function requireAuth(req, res, next) {
   if (!req.user) {
     req.session.redirectTo = req.originalUrl; // Allows intended destination redirect
@@ -33,4 +40,9 @@ function requireMember(req, res, next) {
   next();
 }
 
-export { enforceUserLoggedOut, requireAuth, requireMember };
+export {
+  enforceUserLoggedOut,
+  requireAuth,
+  requireMember,
+  redirectIfAuthenticated,
+};
