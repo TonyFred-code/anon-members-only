@@ -8,8 +8,8 @@ const registerValidationRules = [
   body("adjectives").notEmpty().withMessage("Please select an adjective."),
   body("nouns").notEmpty().withMessage("Please select a noun."),
   body("password")
-    .notEmpty()
     .trim()
+    .notEmpty()
     .withMessage("Password is required")
     .bail()
     .isStrongPassword({
